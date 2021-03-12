@@ -313,5 +313,5 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "dezhab-service.proto",
+	Metadata: "user-service.proto",
 }
