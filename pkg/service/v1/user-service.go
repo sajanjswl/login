@@ -30,6 +30,7 @@ const (
 
 type userServiceServer struct {
 	db *gorm.DB
+	v1.UnimplementedUserServiceServer
 }
 
 // register db wiht server

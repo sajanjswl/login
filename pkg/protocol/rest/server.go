@@ -9,7 +9,7 @@ import (
 
 	v1 "github.com/dezhab-service/pkg/api/v1"
 	restv1 "github.com/dezhab-service/pkg/rest-service/v1"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )

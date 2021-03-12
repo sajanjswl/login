@@ -36,7 +36,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// register(c, ctx)
+	register(c, ctx)
 
 	// login(c, ctx)
 
@@ -45,7 +45,7 @@ func main() {
 
 	// reset(c, ctx)
 
-	requestTokens(c, ctx)
+	// requestTokens(c, ctx)
 
 }
 
