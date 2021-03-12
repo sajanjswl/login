@@ -1,0 +1,45 @@
+version: '2'
+
+volumes:
+  postgresDB:
+
+networks:
+  user-service:
+
+services:
+
+  postgres:
+    image: postgres:10.3-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'pgpass'
+      POSTGRES_DB: 'postgres'
+    restart: always
+    volumes:
+      - postgresDB
+    networks:
+      - user-service
+    ports:
+      - 5432:5432
+
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgAdmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'admin@example.com'
+      PGADMIN_DEFAULT_PASSWORD: 'admin'
+    restart: always
+    volumes:
+      - postgresDB
+    networks:
+      - user-service
+    ports:
+     - 8081:80
+
+
+#docker exec -i postgres psql -U postgres -d postgres < backupUserBasic.sql
+
+
+docker exec postgres pg_dump -U postgres postgres > backup.sql

@@ -1,0 +1,11 @@
+{
+    "go.gopath": "",
+    "files.exclude": {
+        "**/.git": false,
+        "**/.svn": false
+    }
+
+}
+
+
+
