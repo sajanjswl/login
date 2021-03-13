@@ -42,4 +42,4 @@ services:
 #docker exec -i postgres psql -U postgres -d postgres < backupUserBasic.sql
 
 
-docker exec postgres pg_dump -U postgres postgres > backup.sql
+# docker exec postgres pg_dump -U postgres postgres > backup.sql

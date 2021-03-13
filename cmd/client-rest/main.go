@@ -49,7 +49,7 @@ func main() {
 		{
 			"apiVersion":"v1",
 			"emailID": "sjnjaiswal@gmail.com",
-			"password":"password"
+			"password":"sajan4"
 		}
 	`)))
 	if err != nil {

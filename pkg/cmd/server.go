@@ -30,7 +30,7 @@ func RunServer() error {
 	db, err := gorm.Open(os.Getenv("DB_DIALECT"), postgres_endpoints)
 	defer db.Close()
 	if err != nil {
-		log.Panic("Failded to connect to DB", err)
+		log.Warning("Failded to connect to DB", err)
 	}
 
 	if err = db.DB().Ping(); err != nil {

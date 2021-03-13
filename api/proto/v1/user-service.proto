@@ -112,8 +112,6 @@ message AccessTokenAndRefreshTokenResponse{
 }
 service UserService {
 
-
-
     rpc RequestTokens (AccessTokenAndRefreshTokenRequest) returns (AccessTokenAndRefreshTokenResponse){
 
         option (google.api.http) = {
@@ -149,8 +147,6 @@ service UserService {
         };
     }
 
-
-
     rpc Login (LoginRequest) returns (LoginResponse){
 
         option (google.api.http) = {
@@ -167,9 +163,6 @@ service UserService {
         
 
     }
-
-
-
 
     rpc Register (RegistrationRequest) returns (RegistrationResponse){
 

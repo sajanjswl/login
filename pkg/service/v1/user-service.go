@@ -94,8 +94,6 @@ CONTINUE:
 
 			blockTimePeriod, _ := strconv.Atoi(os.Getenv("USER_BLOCKED_RESET_TIME"))
 
-			//	user.TimeTillBlock = time.Now().Add(time.Duration(blockTimePeriod) * time.Hour)
-
 			user.TimeTillBlock = time.Now().Add(time.Duration(blockTimePeriod) * time.Minute)
 		}
 
@@ -149,12 +147,6 @@ func (s *userServiceServer) Register(ctx context.Context, req *v1.RegistrationRe
 		log.Error(err)
 		return nil, status.Errorf(codes.Internal, config.InternalError)
 	}
-
-	//generating email verification code
-	//randomString := randomString(6)
-	// currentTime := time.Now()
-	// Hasher := sha3.New256()
-	// Hasher.Write([]byte(req.GetUser().GetEmailID() + currentTime.String()))
 
 	//passing  request data into dbUser type
 	user = &schema.DbUser{

@@ -48,7 +48,7 @@ func getAWSCreds() *AWSCredConfig {
 
 const (
 	// Replace AccessKeyID with your AccessKeyID key.
-	AccessKeyID = "AKIATY2HYWVHIEPURU5A"
+	AccessKeyID = "AKIATY2HYWVHFCHKYQMM"
 )
 
 func SendOTP(token, email, phone string) error {

@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
 	"time"
 
 	v1 "github.com/dezhab-service/pkg/api/v1"
@@ -21,26 +20,23 @@ func main() {
 
 	address := flag.String("server", "", "gRPC server in format host:port")
 	flag.Parse()
-	fmt.Println("before connection")
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(*address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	fmt.Println("after connection connection")
 
-	log.Debug("I am here")
 	c := v1.NewUserServiceClient(conn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	register(c, ctx)
+	//  register(c, ctx)
 
 	// login(c, ctx)
 
-	// otp(c, ctx)
+	otp(c, ctx)
 	// verifyOTP(c, ctx)
 
 	// reset(c, ctx)
@@ -54,7 +50,7 @@ func register(c v1.UserServiceClient, ctx context.Context) {
 	req := &v1.RegistrationRequest{
 		ApiVersion: apiVersion,
 		User: &v1.User{
-			EmailID:      "sjnjaiswal@gmail.com",
+			EmailID:      "sjnjaiswal1@gmail.com",
 			Password:     "password",
 			FirstName:    "sajan",
 			LastName:     "jaiswal",
@@ -76,8 +72,8 @@ func reset(c v1.UserServiceClient, ctx context.Context) {
 	req1 := &v1.ResetPasswordRequest{
 		ApiVersion: apiVersion,
 		EmailID:    "sjnjaiswal@gmail.com",
-		Password:   "sajan",
-		OTP:        "744484",
+		Password:   "sajan4",
+		OTP:        "632111",
 	}
 	res1, err := c.ResetPassword(ctx, req1)
 	if err != nil {
@@ -92,7 +88,7 @@ func login(c v1.UserServiceClient, ctx context.Context) {
 	req1 := &v1.LoginRequest{
 		ApiVersion: apiVersion,
 		EmailID:    "sjnjaiswal@gmail.com",
-		Password:   "password",
+		Password:   "sajan4",
 	}
 	res1, err := c.Login(ctx, req1)
 	if err != nil {
