@@ -8,14 +8,15 @@ import (
 
 func init() {
 	// loads values from .env into the system
-	if err := godotenv.Load(".env"); err != nil {
-		log.Fatal("No .env file found")
+	if err := godotenv.Load("b.env"); err != nil {
+		log.Println("No .env file found")
 	}
 }
 func main() {
-	if err := cmd.RunServer(); err != nil {
-		log.Fatal(err)
+	// if err := cmd.RunServer(); err != nil {
+	// 	log.Fatal(err)
 
-	}
+	// }
+	_ = cmd.RunServer()
 
 }
