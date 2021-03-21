@@ -12,7 +12,7 @@ import (
 
 func main() {
 
-	address := flag.String("server", "http://localhost:8085", "HTTP gateway url, e.g. http://localhost:8085")
+	address := flag.String("server", "http://localhost:8457", "HTTP gateway url, e.g. http://localhost:8457")
 	flag.Parse()
 
 	var body string
@@ -20,8 +20,8 @@ func main() {
 	resp, err := http.Post(*address+"/v1/login", "application/json", strings.NewReader(fmt.Sprintf(`
 		{
 			"apiVersion":"v1",
-			"emailID": "sjnjaiswal@gmail.com",
-			"password":"sajan4"
+			"emailID": "tkoeppen@gmail.com",
+			"password":"password"
 		}
 	`)))
 	if err != nil {

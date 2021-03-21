@@ -32,9 +32,9 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	register(c, ctx)
+	// register(c, ctx)
 
-	// login(c, ctx)
+	login(c, ctx)
 
 	// otp(c, ctx)
 	// verifyOTP(c, ctx)
@@ -87,8 +87,8 @@ func login(c v1.UserServiceClient, ctx context.Context) {
 
 	req1 := &v1.LoginRequest{
 		ApiVersion: apiVersion,
-		EmailID:    "sjnjaiswal@gmail.com",
-		Password:   "sajan4",
+		EmailID:    "tkoeppen@gmail.com",
+		Password:   "password",
 	}
 	res1, err := c.Login(ctx, req1)
 	if err != nil {
