@@ -63,3 +63,46 @@ deploy:
 destroyDeploy:
 	@echo "removing container"
 	@docker-compose -f docker-compose.yaml down
+
+
+########################################################
+################### TERRAFORM ##########################
+########################################################
+
+tf-init:
+	docker-compose -f deploy/docker-compose.yml run --rm terraform init
+
+tf-fmt:
+	docker-compose -f deploy/docker-compose.yml run --rm terraform fmt
+
+tf-validate:
+	docker-compose -f deploy/docker-compose.yml run --rm terraform validate
+
+tf-plan:
+	docker-compose -f deploy/docker-compose.yml run --rm terraform plan
+
+tf-apply:
+	docker-compose -f deploy/docker-compose.yml run --rm terraform apply
+
+tf-destroy:
+	docker-compose -f deploy/docker-compose.yml run --rm terraform destroy
+
+tf-workspace-dev:
+	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace select dev
+
+tf-workspace-staging:
+	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace select staging
+
+tf-workspace-prod:
+	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace select prod
+
+test:
+	docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test && flake8"
+
+tf-workspace-list:
+	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace list
+
+tf-workspace-new-dev:
+	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace new dev
+
+
