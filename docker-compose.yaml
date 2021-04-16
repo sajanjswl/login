@@ -1,24 +1,22 @@
 
-version: '3.1'
+version: '3.7'
 
-
-networks:
-  docker_user-service:
-    external: true
-    
+networks: 
+  default: 
+    external: 
+      name: user-network
 
 services:
   user:
-    image: user:v1
+    image: user:latest1001
     container_name: user
+    restart: always
     environment:
-    -  USER_DB_HOST=postgres
+      - DB_HOST=postgres
+      - DB_PORT=5432
     env_file: 
       - .env
-    restart: always
-    networks:
-      -  docker_user-service
     ports:
-      - 8456:8456
-      - 8457:8457
+      - 8000:8000
+      - 9000:9000
   

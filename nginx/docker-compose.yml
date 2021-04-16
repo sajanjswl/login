@@ -1,0 +1,14 @@
+version: '3.7'
+
+networks: 
+    default: 
+      external: 
+        name: user-network
+
+services:
+  proxy:
+    image: proxy:100
+    # build: .
+    ports:
+      - 8080:8080
+      - 8085:8085

@@ -18,7 +18,7 @@ We have grpc-rest-gateway implemented i.e all the rpc has their corresponding HT
 
  We also have a rest-client: cmd/client-rest
 
- For login with google/facebook : `http://localhost:8085/v1/login/ui/`
+ For login with google/facebook : `http://localhost:8457/v1/login/ui/`
   
   For PgAdmin setup: https://medium.com/@sjnjaiswal/postgres-in-a-docker-container-simplified-b7e97ef30cfb
   

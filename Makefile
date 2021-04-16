@@ -4,7 +4,7 @@ BINARY_NAME=server
 GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 PATH_TO_SERVER_MAIN=./cmd/server
-PARAMETES_TO_SERVER=grpc-port 8456
+PARAMETES_TO_SERVER=grpc-port 8000
 
 all:	clean build run
 
@@ -24,6 +24,10 @@ run:
 	@echo "starting the server..."
 	@./bin/$(BINARY_NAME) --$(PARAMETES_TO_SERVER)
 
+
+cert:
+	cd cert; ./gen.sh; cd ..
+
 # generates .pb files
 generate:
 	@protoc --proto_path=./api/proto/v1 --proto_path=./third_party --go_out=./pkg/api/v1 --go-grpc_out=./pkg/api/v1 user-service.proto
@@ -32,10 +36,12 @@ generate:
 
 # to bootstrap the project
 bootstrap:
+	@echo "createing external network user-network for docker"
+	@docker network create user-network
 	@echo "pulling dependecies.."
 	@go mod tidy
 	@echo "deploying postgress and PgAdmin"
-	@docker-compose -f ./docker/postgres.yaml up -d
+	@docker-compose -f ./postgres/postgres.yaml up -d
 	@ sleep 10s
 	@echo "restoring sql backup..."
 	@docker exec -i postgres psql -U postgres -d postgres < backup.sql
@@ -43,7 +49,7 @@ bootstrap:
 # destroys  the postgres containers
 destroy:
 	@echo "removing postgress..."
-	@docker-compose -f ./docker/postgres.yaml down
+	@docker-compose -f ./postgres/postgres.yaml down
 
 # creates sqldump
 backup:
@@ -51,11 +57,11 @@ backup:
 	@docker exec postgres pg_dump -U postgres postgres > backup.sql
 
 # deploys server in a docker container
-deploy:
+deploy1:
 	@echo "building binary"
 	@env GOOS=linux GOARCH=arm go build -o bin/server_linux ./cmd/server
 	@echo "building docker image.."
-	@docker build . -t user:v1
+	@docker build . -t user:latest1001
 	@echo "deploying..."
 	@docker-compose -f docker-compose.yaml up
 
@@ -93,9 +99,11 @@ tf-workspace-dev:
 tf-workspace-staging:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace select staging
 
+
 tf-workspace-prod:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace select prod
 
+.PHONY: test
 test:
 	docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test && flake8"
 

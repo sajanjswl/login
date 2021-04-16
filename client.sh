@@ -1,6 +1,6 @@
 ## grpc-client
 # go build -o bin/grpc-client ./cmd/grpc-client
-# ./bin/grpc-client --server=localhost:8456
+# ./bin/grpc-client --server=localhost:8080
 
 
 ## rest-client

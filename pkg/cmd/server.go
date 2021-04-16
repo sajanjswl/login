@@ -23,8 +23,10 @@ func RunServer() error {
 
 	// initialising postgress db endpoints
 	postgres_endpoints := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
-		os.Getenv("USER_DB_HOST"), os.Getenv("USER_DB_PORT"), os.Getenv("USER_NAME"), os.Getenv("USER_DB_NAME"), os.Getenv("USER_DB_PASSWORD"),
-		os.Getenv("USER_DB_SSLMODE"))
+		os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_USER"), os.Getenv("DB_NAME"), os.Getenv("DB_PASS"),
+		os.Getenv("DB_SSLMODE"))
+
+	fmt.Println("printing postgress endpoint", postgres_endpoints)
 
 	log.Println("connecting to db...")
 	db, err := gorm.Open(os.Getenv("DB_DIALECT"), postgres_endpoints)

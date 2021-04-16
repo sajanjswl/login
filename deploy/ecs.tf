@@ -44,7 +44,6 @@ data "template_file" "api_container_definitions" {
   vars = {
     app_image         = var.ecr_image_api
     proxy_image       = var.ecr_image_proxy
-    django_secret_key = var.django_secret_key
     db_host           = aws_db_instance.main.address
     db_name           = aws_db_instance.main.name
     db_user           = aws_db_instance.main.username
@@ -95,8 +94,15 @@ resource "aws_security_group" "ecs_service" {
   }
 
   ingress {
-    from_port   = 8000
-    to_port     = 8000
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8085
+    to_port     = 8085
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

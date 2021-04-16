@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"time"
 
 	v1 "github.com/dezhab-service/pkg/api/v1"
@@ -47,14 +48,15 @@ func main() {
 
 func register(c v1.UserServiceClient, ctx context.Context) {
 
+	fmt.Println("I  was here")
 	req := &v1.RegistrationRequest{
 		ApiVersion: apiVersion,
 		User: &v1.User{
-			EmailID:      "tkoeppen@gmail.com",
-			Password:     "password",
-			FirstName:    "Thomas",
-			LastName:     "K",
-			MobileNumber: "34534534",
+			EmailID:      "sjnjaiswal@gmail.com",
+			Password:     "password1",
+			FirstName:    "Sajan",
+			LastName:     "Jaiswal",
+			MobileNumber: "+917064274923",
 		},
 	}
 
@@ -87,7 +89,7 @@ func login(c v1.UserServiceClient, ctx context.Context) {
 
 	req1 := &v1.LoginRequest{
 		ApiVersion: apiVersion,
-		EmailID:    "tkoeppen@gmail.com",
+		EmailID:    "sjnjaiswal@gmail.com",
 		Password:   "password",
 	}
 	res1, err := c.Login(ctx, req1)

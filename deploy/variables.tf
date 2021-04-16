@@ -27,16 +27,12 @@ variable "bastion_key_name" {
 
 variable "ecr_image_api" {
   description = "ECR Image for API"
-  default     = "PP ECR Image URL:latest"
+  default     = "public.ecr.aws/f0x8s9w9/aws-user-service:latest"
 }
 
 variable "ecr_image_proxy" {
   description = "ECR Image for API"
-  default     = "App ECR Image for Proxy:latest"
-}
-
-variable "django_secret_key" {
-  description = "Secret key for Django app"
+  default     = "public.ecr.aws/f0x8s9w9/aws-user-service:proxy"
 }
 
 
