@@ -91,7 +91,7 @@ tf-apply:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform apply
 
 tf-destroy:
-	docker-compose -f deploy/docker-compose.yml run --rm terraform destroy
+	docker-compose -f deploy/docker-compose.yml run --rm terraform destroy -lock=false
 
 tf-workspace-dev:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace select dev

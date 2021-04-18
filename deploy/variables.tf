@@ -1,10 +1,10 @@
 variable "prefix" {
-  default = "raad"
+  default = "user-service"
 }
 
 
 variable "project" {
-  default = "recipe-app-api-devops"
+  default = "user-service-devops"
 }
 
 variable "contact" {
@@ -13,6 +13,10 @@ variable "contact" {
 
 variable "db_username" {
   description = "Username for the RDS Postgres instance"
+}
+variable "db_name" {
+  description = "db name for the RDS Postgres instance"
+  default     = "userservice"
 }
 
 variable "db_password" {

@@ -1,4 +1,6 @@
 resource "aws_vpc" "main" {
+  # 32-16=16 2^16=65536 ips
+  # subnet mask cheet sheet https://www.aelius.com/njh/subnet_sheet.html
   cidr_block           = "10.1.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
@@ -8,7 +10,7 @@ resource "aws_vpc" "main" {
     map("Name", "${local.prefix}-vpc")
   )
 }
-
+#  internate-gateway
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
@@ -23,6 +25,7 @@ resource "aws_internet_gateway" "main" {
 # Public Subnets - Inbound/Outbound Internet Access #
 #####################################################
 resource "aws_subnet" "public_a" {
+  # 256 ip address
   cidr_block              = "10.1.1.0/24"
   map_public_ip_on_launch = true
   vpc_id                  = aws_vpc.main.id
@@ -47,9 +50,10 @@ resource "aws_route_table_association" "public_a" {
   subnet_id      = aws_subnet.public_a.id
   route_table_id = aws_route_table.public_a.id
 }
-
+#  route to internet gateway
 resource "aws_route" "public_internet_access_a" {
-  route_table_id         = aws_route_table.public_a.id
+  route_table_id = aws_route_table.public_a.id
+  #   destination is public internet
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.main.id
 }
@@ -62,7 +66,7 @@ resource "aws_eip" "public_a" {
     map("Name", "${local.prefix}-public-a")
   )
 }
-
+#  for outbound traffic
 resource "aws_nat_gateway" "public_a" {
   allocation_id = aws_eip.public_a.id
   subnet_id     = aws_subnet.public_a.id
@@ -84,7 +88,7 @@ resource "aws_subnet" "public_b" {
     map("Name", "${local.prefix}-public-b")
   )
 }
-
+# route table
 resource "aws_route_table" "public_b" {
   vpc_id = aws_vpc.main.id
 
@@ -93,12 +97,12 @@ resource "aws_route_table" "public_b" {
     map("Name", "${local.prefix}-public-b")
   )
 }
-
+# routable associaton with sub-net public_b
 resource "aws_route_table_association" "public_b" {
   subnet_id      = aws_subnet.public_b.id
   route_table_id = aws_route_table.public_b.id
 }
-
+# route to in
 resource "aws_route" "public_internet_access_b" {
   route_table_id         = aws_route_table.public_b.id
   destination_cidr_block = "0.0.0.0/0"

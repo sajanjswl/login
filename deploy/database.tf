@@ -3,6 +3,7 @@ resource "aws_db_subnet_group" "main" {
   subnet_ids = [
     aws_subnet.private_a.id,
     aws_subnet.private_b.id
+
   ]
 
   tags = merge(
@@ -20,9 +21,11 @@ resource "aws_security_group" "rds" {
     protocol  = "tcp"
     from_port = 5432
     to_port   = 5432
+    #  rds will allow access only form those aws services which has this policy group
     security_groups = [
+      # for acess to db from bastion server
       aws_security_group.bastion.id,
-      aws_security_group.ecs_service.id,
+      # aws_security_group.ecs_service.id,
     ]
 
   }
@@ -32,7 +35,7 @@ resource "aws_security_group" "rds" {
 
 resource "aws_db_instance" "main" {
   identifier              = "${local.prefix}-db"
-  name                    = "recipe"
+  name                    = "userservice"
   allocated_storage       = 20
   storage_type            = "gp2"
   engine                  = "postgres"

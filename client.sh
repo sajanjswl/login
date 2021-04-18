@@ -1,9 +1,9 @@
 ## grpc-client
-# go build -o bin/grpc-client ./cmd/grpc-client
-# ./bin/grpc-client --server=localhost:8080
+go build -o bin/grpc-client ./cmd/grpc-client
+./bin/grpc-client --server=localhost:8000
 
 
 ## rest-client
 
-go build -o bin/rest-client ./cmd/rest-client
-./bin/rest-client
+# go build -o bin/rest-client ./cmd/rest-client
+# ./bin/rest-client

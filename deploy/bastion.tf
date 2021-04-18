@@ -20,6 +20,7 @@ resource "aws_iam_role_policy_attachment" "bastion_attach_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
+# An isnstance profile is something that we can assign to our bastion isnstance to give it IAM role information
 resource "aws_iam_instance_profile" "bastion" {
   name = "${local.prefix}-bastion-instance-profile"
   role = aws_iam_role.bastion.name
@@ -53,27 +54,28 @@ resource "aws_security_group" "bastion" {
   name        = "${local.prefix}-bastion"
   vpc_id      = aws_vpc.main.id
 
+  # for ssh connection
   ingress {
     protocol    = "tcp"
     from_port   = 22
     to_port     = 22
     cidr_blocks = ["0.0.0.0/0"]
   }
-
+  # for HTTPS protocol
   egress {
     protocol    = "tcp"
     from_port   = 443
     to_port     = 443
     cidr_blocks = ["0.0.0.0/0"]
   }
-
+  # for HTTP protocol
   egress {
     protocol    = "tcp"
     from_port   = 80
     to_port     = 80
     cidr_blocks = ["0.0.0.0/0"]
   }
-
+  # for Postgres
   egress {
     from_port = 5432
     to_port   = 5432
