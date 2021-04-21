@@ -8,7 +8,7 @@ networks:
 
 services:
   user:
-    image: user:latest1001
+    image: public.ecr.aws/f0x8s9w9/aws-user-service:latest
     container_name: user
     restart: always
     environment:

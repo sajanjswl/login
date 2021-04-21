@@ -68,6 +68,7 @@
 FROM  scratch
 WORKDIR /user-service
 EXPOSE 8000 9000
+ADD .env /user-service/.env
 ADD ./bin/server_linux /user-service/bin/server_linux
 ADD ./templates/index.html /user-service/templates/index.html
 ENTRYPOINT ["/user-service/bin/server_linux","--grpc-port", "8000"]

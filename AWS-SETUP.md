@@ -12,6 +12,7 @@ for storing terrafom state.(In use `user-service-aws-terraform-state-bucket`)
 
 * AWS bastion instance ssh key setup: 
 * ec2 dashboard -> network and security -> Key Pairs
+* provide the key  pair name to `bastion_key_name` in variable.tf file
 
 # Regenrate vault-credentials
 aws-vault exec sajan.jaiswal --duration=12h
@@ -52,4 +53,4 @@ db_name     = "user-service"
 
 
  # on bastion
-docker run -it --rm jbergknoff/postgresql-client postgresql://recihgjhghpeapp:changeme67r6fvfy@user-service-dev-db.c7bjzqhwgcal.us-east-1.rds.amazonaws.com:5432/userservice
+docker run -it --rm jbergknoff/postgresql-client postgresql://recihgjhghpeapp:changeme67r6fvfy@user-service-default-db.c7bjzqhwgcal.us-east-1.rds.amazonaws.com:5432/userservice

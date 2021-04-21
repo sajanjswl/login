@@ -46,15 +46,15 @@ data "template_file" "api_container_definitions" {
   template = file("templates/ecs/container-definitions.json.tpl")
 
   vars = {
-    app_image         = var.ecr_image_api
-    proxy_image       = var.ecr_image_proxy
-    db_host           = aws_db_instance.main.address
-    db_name           = aws_db_instance.main.name
-    db_user           = aws_db_instance.main.username
-    db_pass           = aws_db_instance.main.password
-    log_group_name    = aws_cloudwatch_log_group.ecs_task_logs.name
-    log_group_region  = data.aws_region.current.name
-    allowed_hosts     = "*"
+    app_image        = var.ecr_image_api
+    proxy_image      = var.ecr_image_proxy
+    db_host          = aws_db_instance.main.address
+    db_name          = aws_db_instance.main.name
+    db_user          = aws_db_instance.main.username
+    db_pass          = aws_db_instance.main.password
+    log_group_name   = aws_cloudwatch_log_group.ecs_task_logs.name
+    log_group_region = data.aws_region.current.name
+    # allowed_hosts     = "*"
   }
 }
 
@@ -115,12 +115,12 @@ resource "aws_security_group" "ecs_service" {
 }
 
 resource "aws_ecs_service" "api" {
-  name            = "${local.prefix}-api"
-  cluster         = aws_ecs_cluster.main.name
-  task_definition = aws_ecs_task_definition.api.family
-  desired_count   = 1
-  launch_type     = "FARGATE"
-   platform_version = "1.4.0"
+  name             = "${local.prefix}-api"
+  cluster          = aws_ecs_cluster.main.name
+  task_definition  = aws_ecs_task_definition.api.family
+  desired_count    = 1
+  launch_type      = "FARGATE"
+  platform_version = "1.4.0"
 
   network_configuration {
     subnets = [

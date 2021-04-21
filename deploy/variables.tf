@@ -21,6 +21,7 @@ variable "db_name" {
 
 variable "db_password" {
   description = "Password for the RDS postgres instance"
+  default     = "password1"
 }
 
 
@@ -36,7 +37,8 @@ variable "ecr_image_api" {
 
 variable "ecr_image_proxy" {
   description = "ECR Image for API"
-  default     = "public.ecr.aws/f0x8s9w9/aws-user-service:proxy"
+  default     = "public.ecr.aws/f0x8s9w9/user-service-proxy:latest"
 }
+
 
 

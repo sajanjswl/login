@@ -25,7 +25,7 @@ resource "aws_security_group" "rds" {
     security_groups = [
       # for acess to db from bastion server
       aws_security_group.bastion.id,
-      # aws_security_group.ecs_service.id,
+      aws_security_group.ecs_service.id,
     ]
 
   }

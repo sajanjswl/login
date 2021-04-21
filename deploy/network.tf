@@ -163,7 +163,7 @@ resource "aws_route" "private_a_internet_out" {
 }
 
 resource "aws_subnet" "private_b" {
-  cidr_block        = "10.1.11.0/24"
+  cidr_block        = "10.1.14.0/24"
   vpc_id            = aws_vpc.main.id
   availability_zone = "${data.aws_region.current.name}b"
 
