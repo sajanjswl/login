@@ -1,5 +1,4 @@
 GOCMD=go
-
 BINARY_NAME=server
 GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
@@ -24,10 +23,6 @@ run:
 	@echo "starting the server..."
 	@./bin/$(BINARY_NAME) --$(PARAMETES_TO_SERVER)
 
-
-cert:
-	cd cert; ./gen.sh; cd ..
-
 # generates .pb files
 generate:
 	@protoc --proto_path=./api/proto/v1 --proto_path=./third_party --go_out=./pkg/api/v1 --go-grpc_out=./pkg/api/v1 user-service.proto
@@ -35,7 +30,7 @@ generate:
 	@protoc --proto_path=./api/proto/v1 --proto_path=./third_party --swagger_out=logtostderr=true:./api/swagger/v1 user-service.proto
 
 # to bootstrap the project
-bootstrap:
+db-bootstrap:
 	@echo "createing external network user-network for docker"
 	@docker network create user-network
 	@echo "pulling dependecies.."
@@ -47,28 +42,42 @@ bootstrap:
 	@docker exec -i postgres psql -U postgres -d postgres < backup.sql
 	
 # destroys  the postgres containers
-destroy:
+db-destroy:
 	@echo "removing postgress..."
 	@docker-compose -f ./postgres/postgres.yaml down
 
 # creates sqldump
-backup:
+db-backup:
 	@echo "creating sql dump"
 	@docker exec postgres pg_dump -U postgres postgres > backup.sql
 
 # deploys server in a docker container
-deploy1:
+service-deploy:
 	@echo "building binary"
-	@env GOOS=linux GOARCH=arm go build -o bin/server_linux ./cmd/server
+	@env GOOS=linux GOARCH=amd64 go build -o bin/server_linux ./cmd/server
 	@echo "building docker image.."
-	@docker build . -t user:latest1001
+	@docker build -t user:latest1001 .
 	@echo "deploying..."
 	@docker-compose -f docker-compose.yaml up
 
 # destorys the user-service container
-destroyDeploy:
+service-destroy:
 	@echo "removing container"
 	@docker-compose -f docker-compose.yaml down
+
+# building and pushing image to AWs-ECR
+build-push:
+	@echo "deleting binary"
+	@rm -r ./bin/server_linux
+	@echo "building binary"
+	@env GOOS=linux GOARCH=amd64 go build -o bin/server_linux ./cmd/server
+	@echo "building docker image.."
+	@docker build -t aws-user-service .
+	@sleep 10s
+	@echo "tagging image to latest"
+	@docker tag aws-user-service:latest public.ecr.aws/f0x8s9w9/aws-user-service:latest
+	@echo "pushing image to ecr"
+	@docker push public.ecr.aws/f0x8s9w9/aws-user-service:latest
 
 
 ########################################################
@@ -102,10 +111,6 @@ tf-workspace-staging:
 
 tf-workspace-prod:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace select prod
-
-.PHONY: test
-test:
-	docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test && flake8"
 
 tf-workspace-list:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace list

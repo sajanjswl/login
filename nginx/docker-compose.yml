@@ -7,7 +7,7 @@ networks:
 
 services:
   proxy:
-    image: proxy:100
+    image: public.ecr.aws/f0x8s9w9/user-service-proxy:latest
     # build: .
     ports:
       - 8080:8080
