@@ -7,8 +7,7 @@ networks:
 
 services:
   proxy:
-    image: public.ecr.aws/f0x8s9w9/user-service-proxy:latest
-    # build: .
+    image: user-service-proxy:latest
     ports:
       - 8080:8080
       - 8085:8085

@@ -56,7 +56,7 @@ service-deploy:
 	@echo "building binary"
 	@env GOOS=linux GOARCH=amd64 go build -o bin/server_linux ./cmd/server
 	@echo "building docker image.."
-	@docker build -t user:latest1001 .
+	@docker build -t aws-user-service .
 	@echo "deploying..."
 	@docker-compose -f docker-compose.yaml up
 
@@ -65,8 +65,22 @@ service-destroy:
 	@echo "removing container"
 	@docker-compose -f docker-compose.yaml down
 
-# building and pushing image to AWs-ECR
-build-push:
+# deploys proxy in a docker container locally
+proxy-deploy:
+	@cd nginx
+	@echo "building NGINX image.."
+	@docker build -t user-service-proxy ./nginx/
+	@echo "deploying..."
+	@docker-compose -f ./nginx/docker-compose.yml up
+
+# destroys the user service container
+proxy-destroy:
+	@echo "removing container"
+	@docker-compose -f ./nginx/docker-compose.yml down
+	
+
+# building and pushing user-service image to AWs-ECR
+service-push:
 	@echo "deleting binary"
 	@rm -r ./bin/server_linux
 	@echo "building binary"
@@ -78,6 +92,18 @@ build-push:
 	@docker tag aws-user-service:latest public.ecr.aws/f0x8s9w9/aws-user-service:latest
 	@echo "pushing image to ecr"
 	@docker push public.ecr.aws/f0x8s9w9/aws-user-service:latest
+
+# building and pusing proxy image to aws ecr
+proxy-push:
+	@cd nginx
+	@echo "building NGINX image.."
+	@docker build -t user-service-proxy ./nginx/
+	@sleep 10s
+	@echo "tagging image to latest"
+	@docker tag user-service-proxy:latest public.ecr.aws/f0x8s9w9/user-service-proxy:latest
+	@echo "pushing image to ecr"
+	@docker push public.ecr.aws/f0x8s9w9/user-service-proxy:latest
+
 
 
 ########################################################

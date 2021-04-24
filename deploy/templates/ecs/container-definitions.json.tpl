@@ -73,7 +73,11 @@
             {
                 "containerPort": 8000,
                 "hostPort": 8000
-            }
+            },
+             {
+              "containerPort": 9000,
+                "hostPort": 9000
+             }
         ],
         "mountPoints": [
             {
@@ -91,6 +95,10 @@
             {
                 "containerPort": 8080,
                 "hostPort": 8080
+            },
+            {
+             "containerPort": 8085,
+                "hostPort": 8085
             }
         ],
         "memoryReservation": 256,

@@ -93,30 +93,17 @@ To Know more read the Terraform section of Makefile
 
 ### For Bastion ssh access from local machine
 `ssh ec2-user@ec2-54-224-151-134.compute-1.amazonaws.com`
+### For copying backup.sql to bastion instance
+`scp -r backup.sql ec2-user@ec2-54-162-139-196.compute-1.amazonaws.com:~/.`
+### For Restoring backup.sql from bastion instance
+
+ ``` docker run -v ~/:/var/pgdata -it --rm  jbergknoff/postgresql-client -huser-service-default-db.c7bjzqhwgcal.us-east-1.rds.amazonaws.com  -U recihgjhghpeapp userservice  -f /var/pgdata/backup.sql ```
 
 
-#postgres commands
-docker run -it --rm \
-    --network user-network \
-    bitnami/postgresql:latest psql -h postgres -U postgres
-
-psql -h $(terraform output -raw rds_hostname) -p $(terraform output -raw rds_port) -U $(terraform output -raw rds_username) postgres < /Users/sajanjswl/sandbox/dl-auth/backup.sql
-
-
-psql -h education.clzpfr8xlxjo.us-east-2.rds.amazonaws.com -p 5432 -U edu postgres
-
-
-docker run -it --rm jbergknoff/postgresql-client postgresql://recihgjhghpeapp:changeme67r6fvfy@user-service-dev-db.c7bjzqhwgcal.us-east-1.rds.amazonaws.com:5432/user-service
-
-
+##### DB Details
 db_username = "recihgjhghpeapp"
 db_password = "changeme67r6fvfy"
-db_name     = "user-service"
-
-
-
- ## Running Postgres Client from Bastion Instance to interact with AWS-RDS
-docker run -it --rm jbergknoff/postgresql-client postgresql://recihgjhghpeapp:changeme67r6fvfy@user-service-default-db.c7bjzqhwgcal.us-east-1.rds.amazonaws.com:5432/userservice
+db_name     = "userservice"
 
 
 ## Docker AWS-ECR loging with aws-vault 

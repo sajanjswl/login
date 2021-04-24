@@ -11,6 +11,7 @@ resource "aws_lb" "api" {
   tags = local.common_tags
 }
 
+## target group is a group of servers that lb can  forward requests to
 resource "aws_lb_target_group" "api" {
   name        = "${local.prefix}-api"
   protocol    = "HTTP"
@@ -18,9 +19,9 @@ resource "aws_lb_target_group" "api" {
   target_type = "ip"
   port        = 8085
 
-  #   health_check {
-  #     path = "/admin/login/"
-  #   }
+    health_check {
+      path = "/v1/login/ui/"
+    }
 }
 
 resource "aws_lb_listener" "api" {
