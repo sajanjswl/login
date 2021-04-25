@@ -98,12 +98,12 @@ resource "aws_security_group" "ecs_service" {
   }
 
   ingress {
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-   security_groups = [
+    from_port = 8080
+    to_port   = 8080
+    protocol  = "tcp"
+    security_groups = [
       aws_security_group.lb.id
-    ] 
+    ]
   }
 
   ingress {
@@ -140,5 +140,13 @@ resource "aws_ecs_service" "api" {
     container_name   = "proxy"
     container_port   = 8085
   }
+
+  # # grpc
+  # load_balancer {
+  #   target_group_arn = aws_lb_target_group.apig.arn
+  #   container_name   = "api"
+  #   container_port   = 8080
+  # }
+
 
 }
