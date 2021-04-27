@@ -36,27 +36,35 @@ resource "aws_lb_listener" "api" {
 }
 
 #  for GRPC
-# resource "aws_lb_target_group" "apig" {
-#   name     = "${local.prefix}-apig"
-#   protocol = "HTTP"
-#   protocol_version = "GRPC"
-#   vpc_id           = aws_vpc.main.id
-#   target_type      = "ip"
-#   port             = 8080
 
-# }
 
-# resource "aws_lb_listener" "apig" {
-#   load_balancer_arn = aws_lb.api.arn
-#   port              = 90
+resource "aws_lb_target_group" "apig" {
+  name     = "${local.prefix}-apig"
+  protocol = "HTTP"
+  # protocol         = "HTTP/2"
+  protocol_version = "GRPC"
+  vpc_id           = aws_vpc.main.id
+  target_type      = "ip"
+  port             = 8080
 
-#   protocol         = "HTTPS"
+}
 
-#   default_action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.apig.arn
-#   }
-# }
+resource "aws_lb_listener" "apig" {
+  load_balancer_arn = aws_lb.api.arn
+  port              = 90
+  # protocol          = "HTTP"
+  protocol = "HTTPS"
+  # protocol_version  = "GRPC"
+
+  certificate_arn = aws_acm_certificate_validation.cert.certificate_arn
+
+
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.apig.arn
+  }
+}
 
 
 resource "aws_security_group" "lb" {
@@ -82,19 +90,19 @@ resource "aws_security_group" "lb" {
 
   # for GRPC
 
-  # ingress {
-  #   protocol    = "tcp"
-  #   from_port   = 90
-  #   to_port     = 90
-  #   cidr_blocks = ["0.0.0.0/0"]
-  # }
+  ingress {
+    protocol    = "tcp"
+    from_port   = 90
+    to_port     = 90
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-  # egress {
-  #   protocol    = "tcp"
-  #   from_port   = 8080
-  #   to_port     = 8080
-  #   cidr_blocks = ["0.0.0.0/0"]
-  # }
+  egress {
+    protocol    = "tcp"
+    from_port   = 8080
+    to_port     = 8080
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   tags = local.common_tags
 }

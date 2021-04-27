@@ -141,12 +141,12 @@ resource "aws_ecs_service" "api" {
     container_port   = 8085
   }
 
-  # # grpc
-  # load_balancer {
-  #   target_group_arn = aws_lb_target_group.apig.arn
-  #   container_name   = "api"
-  #   container_port   = 8080
-  # }
-
+  # grpc
+  load_balancer {
+    target_group_arn = aws_lb_target_group.apig.arn
+    container_name   = "proxy"
+    container_port   = 8080
+  }
+  depends_on = [aws_lb_listener.api, aws_lb_listener.apig]
 
 }

@@ -40,5 +40,18 @@ variable "ecr_image_proxy" {
   default     = "public.ecr.aws/f0x8s9w9/user-service-proxy:latest"
 }
 
+variable "dns_zone_name" {
+  description = "Domain name"
+  default     = "kubeosc.com"
+}
 
+variable "subdomain" {
+  description = "Subdomain per environment"
+  type        = map(string)
+  default = {
+    production = "api"
+    staging    = "api.staging"
+    dev        = "api.dev"
+  }
+}
 
