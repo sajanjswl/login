@@ -5,24 +5,64 @@ import (
 	"flag"
 	"fmt"
 	"time"
+	"io/ioutil"
+	"crypto/tls"
+	"crypto/x509"
 
 	v1 "github.com/dezhab-service/pkg/api/v1"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 const (
 	// apiVersion is version of API is provided by server
 	apiVersion = "v1"
 )
+func loadTLSCredentials() (credentials.TransportCredentials, error) {
+	// Load certificate of the CA who signed server's certificate
+	pemServerCA, err := ioutil.ReadFile("cert/ExampleInternalCA-Root.crt")
+	if err != nil {
+		return nil, err
+	}
 
+	certPool := x509.NewCertPool()
+	if !certPool.AppendCertsFromPEM(pemServerCA) {
+		return nil, fmt.Errorf("failed to add server CA's certificate")
+	}
+
+	// Load client's certificate and private key
+	clientCert, err := tls.LoadX509KeyPair("cert/client-cert.pem", "cert/client-key.pem")
+	if err != nil {
+		return nil, err
+	}
+
+	// Create the credentials and return it
+	config := &tls.Config{
+		Certificates: []tls.Certificate{clientCert},
+		RootCAs:      certPool,
+	}
+
+	return credentials.NewTLS(config), nil
+}
 func main() {
 	// get configuration
 
 	address := flag.String("server", "", "gRPC server in format host:port")
 	flag.Parse()
+
+
+	tlsCredentials, err := loadTLSCredentials()
+	if err != nil {
+		log.Fatal("cannot load TLS credentials: ", err)
+	}
+
+	// transportOption = grpc.WithTransportCredentials(tlsCredentials)
+
+
+
 	// Set up a connection to the server.
-	conn, err := grpc.Dial(*address, grpc.WithInsecure())
+	conn, err := grpc.Dial(*address, grpc.WithTransportCredentials(tlsCredentials))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}

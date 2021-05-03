@@ -7,11 +7,9 @@ data "aws_ami" "amazon_linux" {
   owners = ["amazon"]
 }
 
-
 resource "aws_iam_role" "bastion" {
   name               = "${local.prefix}-bastion"
   assume_role_policy = file("./templates/bastion/instance-profile-policy.json")
-
   tags = local.common_tags
 }
 

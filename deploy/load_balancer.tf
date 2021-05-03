@@ -27,8 +27,8 @@ resource "aws_lb_target_group" "api" {
 resource "aws_lb_listener" "api" {
   load_balancer_arn = aws_lb.api.arn
   port              = 80
-  protocol          = "HTTP"
-
+  protocol          = "HTTPS"
+certificate_arn = aws_acm_certificate_validation.cert.certificate_arn
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.api.arn
@@ -51,12 +51,12 @@ resource "aws_lb_target_group" "apig" {
 
 resource "aws_lb_listener" "apig" {
   load_balancer_arn = aws_lb.api.arn
-  port              = 90
+  port              = 443
   # protocol          = "HTTP"
   protocol = "HTTPS"
   # protocol_version  = "GRPC"
 
-  certificate_arn = aws_acm_certificate_validation.cert.certificate_arn
+   certificate_arn = aws_acm_certificate_validation.cert.certificate_arn
 
 
 
@@ -92,8 +92,8 @@ resource "aws_security_group" "lb" {
 
   ingress {
     protocol    = "tcp"
-    from_port   = 90
-    to_port     = 90
+    from_port   = 443
+    to_port     = 443
     cidr_blocks = ["0.0.0.0/0"]
   }
 

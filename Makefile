@@ -126,7 +126,7 @@ tf-apply:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform apply
 
 tf-destroy:
-	docker-compose -f deploy/docker-compose.yml run --rm terraform destroy 
+	docker-compose -f deploy/docker-compose.yml run --rm terraform destroy
 
 tf-workspace-dev:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace select dev
@@ -138,6 +138,9 @@ tf-workspace-staging:
 tf-workspace-prod:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace select prod
 
+tf-workspace-new-prod:
+	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace new prod
+
 tf-workspace-list:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace list
 
@@ -145,3 +148,6 @@ tf-workspace-new-dev:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace new dev
 
 
+
+cert1:
+	cd cert; ./gen.sh; cd ..

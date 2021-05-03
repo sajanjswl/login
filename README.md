@@ -97,7 +97,7 @@ To Know more read the Terraform section of Makefile
 `scp -r backup.sql ec2-user@ec2-54-162-139-196.compute-1.amazonaws.com:~/.`
 ### For Restoring backup.sql from bastion instance
 
- ``` docker run -v ~/:/var/pgdata -it --rm  jbergknoff/postgresql-client -huser-service-default-db.c7bjzqhwgcal.us-east-1.rds.amazonaws.com  -U recihgjhghpeapp userservice  -f /var/pgdata/backup.sql ```
+ ``` docker run -v ~/:/var/pgdata -it --rm  jbergknoff/postgresql-client -h user-service-prod-db.c7bjzqhwgcal.us-east-1.rds.amazonaws.com  -U recihgjhghpeapp userservice  -f /var/pgdata/backup.sql ```
 
 
 ##### DB Details
