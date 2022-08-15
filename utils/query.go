@@ -3,8 +3,8 @@ package utils
 import (
 	"time"
 
-	"github.com/dezhab-service/config"
-	schema "github.com/dezhab-service/data"
+	"github.com/sajanjswl/auth/config"
+	schema "github.com/sajanjswl/auth/data"
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc/codes"

@@ -1,4 +1,4 @@
-module github.com/dezhab-service
+module github.com/sajanjswl/auth
 
 go 1.12
 
@@ -10,7 +10,6 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway v1.14.5
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.3.0
 	github.com/jinzhu/gorm v1.9.11
-	github.com/joho/godotenv v1.3.0
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/sirupsen/logrus v1.4.2
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9

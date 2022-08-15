@@ -4,7 +4,7 @@ import (
 	"os"
 	"strconv"
 
-	schema "github.com/dezhab-service/data"
+	schema "github.com/sajanjswl/auth/data"
 	"github.com/dgrijalva/jwt-go"
 	log "github.com/sirupsen/logrus"
 )

@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/signal"
 
-	v1 "github.com/dezhab-service/pkg/api/v1"
+	v1 "github.com/sajanjswl/auth/pkg/api/v1"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
