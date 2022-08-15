@@ -1,86 +1,74 @@
 package config
 
-
-type Config struct{
-	AbsoluteLogPath string
-
+type Config struct {
 	//  gRPC
 	GRPCNetworkType string
-	GRPCHost string
-	GRPCPort string
-	
-	
+	GRPCHost        string
+	GRPCPort        string
+
 	// REST Gateway
-	RESTHost string
-	RESTPort string
-	
-	
+	RESTHost        string
+	RESTPort        string
+	AbsoluteLogPath string
+
 	//  for local deployment
-	DBHost string
-	DBName string
-	DBUser   string
-	DBPass string
-	DBPort string
-	DBEnableTLS bool
-	
-	//  gorm 
+	DBHost     string
+	DBName     string
+	DBUserName string
+	DBPassword string
+	DBPort     string
+	DBSLLMode  string
+
+	//  gorm
 	DBDialect string
-	
+
 	// auth
-	TokenKey string
-	TokenIssuer string
-	AccessTokenAliveTime int
+	TokenKey              string
+	TokenIssuer           string
+	AccessTokenAliveTime  int
 	RefreshTokenAliveTime int
-	OuthCookieAliveTime int
-	
+	OuthCookieAliveTime   int
+
 	// password reset time
-	PasswordResetInterval string
-	
+	PasswordResetInterval int
+
 	// OTP
-	OTPLength int
+	OTPLength    int
 	OTPAliveTime int
-	
+
 	//aws
 	OTPSender string
-	
+
 	// rest endpoints
-	LoginUI string
-	
+	LoginUIEndPoint string
+
 	//  file location
-	TemplatesHtml string
-	
-	
+	HTMLTemplate string
+
 	//  google auth endpoints and secret
-	GoogleLoginEnpoint string
+	GoogleLoginEnpoint    string
 	GoogleCallbackEnpoint string
 
-	GoogleRedirectURl string
-	GoogleClientId string
+	GoogleRedirectURl  string
+	GoogleClientId     string
 	GoogleClientSecret string
-	
-	
-	
 
-// facebook login configs
-	FacebookLoginEndPoint string
+	// facebook login configs
+	FacebookLoginEndPoint    string
 	FacebookCallbackEndPoint string
-	FacebookClientId string
-	FacebookClientSecret string
-	FacebookRedirectUrl string
-	
-	
-	
-//  aws config for OTP
+	FacebookClientId         string
+	FacebookClientSecret     string
+	FacebookRedirectUrl      string
 
-	AWSAceesKeyId string
+	//  aws config for OTP
+	AWSAceesKeyId      string
 	AWSSecretAccessKey string
-	AWSRegion string
-	AWSSMTPUser string
-	AWSSMTPPassword string
-	AWSHost string
-	AWSPort string
-	AWSSenderEmail string	
-	
+	AWSRegion          string
+	AWSSMTPUser        string
+	AWSSMTPPassword    string
+	AWSHost            string
+	AWSPort            string
+	AWSSenderEmail     string
 }
 
 func NewConfig() *Config {

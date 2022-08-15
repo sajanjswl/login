@@ -7,9 +7,9 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	v1 "github.com/sajanjswl/auth/pkg/api/v1"
 	restv1 "github.com/sajanjswl/auth/pkg/rest-service/v1"
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )

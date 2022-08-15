@@ -983,7 +983,7 @@ var file_v1_auth_service_proto_rawDesc = []byte{
 	0x0b, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x12, 0x22, 0x0a, 0x0c,
 	0x72, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x02, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x0c, 0x72, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x54, 0x6f, 0x6b, 0x65, 0x6e,
-	0x32, 0xf8, 0x04, 0x0a, 0x0b, 0x55, 0x73, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x32, 0xf8, 0x04, 0x0a, 0x0b, 0x41, 0x75, 0x74, 0x68, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
 	0x12, 0x7d, 0x0a, 0x0d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x54, 0x6f, 0x6b, 0x65, 0x6e,
 	0x73, 0x12, 0x25, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x63, 0x63, 0x65, 0x73, 0x73, 0x54, 0x6f, 0x6b,
 	0x65, 0x6e, 0x41, 0x6e, 0x64, 0x52, 0x65, 0x66, 0x72, 0x65, 0x73, 0x68, 0x54, 0x6f, 0x6b, 0x65,
@@ -1068,20 +1068,20 @@ var file_v1_auth_service_proto_goTypes = []interface{}{
 }
 var file_v1_auth_service_proto_depIdxs = []int32{
 	0,  // 0: v1.RegistrationRequest.user:type_name -> v1.User
-	13, // 1: v1.UserService.RequestTokens:input_type -> v1.AccessTokenAndRefreshTokenRequest
-	11, // 2: v1.UserService.ResetPassword:input_type -> v1.ResetPasswordRequest
-	9,  // 3: v1.UserService.VerifyOTP:input_type -> v1.VerifyOTPRequest
-	7,  // 4: v1.UserService.OTP:input_type -> v1.LoginWithOTPRequest
-	3,  // 5: v1.UserService.Login:input_type -> v1.LoginRequest
-	5,  // 6: v1.UserService.Home:input_type -> v1.HomeRequest
-	1,  // 7: v1.UserService.Register:input_type -> v1.RegistrationRequest
-	14, // 8: v1.UserService.RequestTokens:output_type -> v1.AccessTokenAndRefreshTokenResponse
-	12, // 9: v1.UserService.ResetPassword:output_type -> v1.ResetPasswordResponse
-	10, // 10: v1.UserService.VerifyOTP:output_type -> v1.VerifyOTPResponse
-	8,  // 11: v1.UserService.OTP:output_type -> v1.LoginWithOTPResponse
-	4,  // 12: v1.UserService.Login:output_type -> v1.LoginResponse
-	6,  // 13: v1.UserService.Home:output_type -> v1.HomeResponse
-	2,  // 14: v1.UserService.Register:output_type -> v1.RegistrationResponse
+	13, // 1: v1.AuthService.RequestTokens:input_type -> v1.AccessTokenAndRefreshTokenRequest
+	11, // 2: v1.AuthService.ResetPassword:input_type -> v1.ResetPasswordRequest
+	9,  // 3: v1.AuthService.VerifyOTP:input_type -> v1.VerifyOTPRequest
+	7,  // 4: v1.AuthService.OTP:input_type -> v1.LoginWithOTPRequest
+	3,  // 5: v1.AuthService.Login:input_type -> v1.LoginRequest
+	5,  // 6: v1.AuthService.Home:input_type -> v1.HomeRequest
+	1,  // 7: v1.AuthService.Register:input_type -> v1.RegistrationRequest
+	14, // 8: v1.AuthService.RequestTokens:output_type -> v1.AccessTokenAndRefreshTokenResponse
+	12, // 9: v1.AuthService.ResetPassword:output_type -> v1.ResetPasswordResponse
+	10, // 10: v1.AuthService.VerifyOTP:output_type -> v1.VerifyOTPResponse
+	8,  // 11: v1.AuthService.OTP:output_type -> v1.LoginWithOTPResponse
+	4,  // 12: v1.AuthService.Login:output_type -> v1.LoginResponse
+	6,  // 13: v1.AuthService.Home:output_type -> v1.HomeResponse
+	2,  // 14: v1.AuthService.Register:output_type -> v1.RegistrationResponse
 	8,  // [8:15] is the sub-list for method output_type
 	1,  // [1:8] is the sub-list for method input_type
 	1,  // [1:1] is the sub-list for extension type_name

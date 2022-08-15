@@ -6,7 +6,7 @@
   },
   "tags": [
     {
-      "name": "UserService"
+      "name": "AuthService"
     }
   ],
   "schemes": [
@@ -21,7 +21,7 @@
   "paths": {
     "/v1/home": {
       "get": {
-        "operationId": "UserService_Home",
+        "operationId": "AuthService_Home",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -52,13 +52,13 @@
           }
         ],
         "tags": [
-          "UserService"
+          "AuthService"
         ]
       }
     },
     "/v1/login": {
       "post": {
-        "operationId": "UserService_Login",
+        "operationId": "AuthService_Login",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -91,13 +91,13 @@
           }
         ],
         "tags": [
-          "UserService"
+          "AuthService"
         ]
       }
     },
     "/v1/login/otp": {
       "post": {
-        "operationId": "UserService_OTP",
+        "operationId": "AuthService_OTP",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -130,13 +130,13 @@
           }
         ],
         "tags": [
-          "UserService"
+          "AuthService"
         ]
       }
     },
     "/v1/login/otp/verify": {
       "post": {
-        "operationId": "UserService_VerifyOTP",
+        "operationId": "AuthService_VerifyOTP",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -169,13 +169,13 @@
           }
         ],
         "tags": [
-          "UserService"
+          "AuthService"
         ]
       }
     },
     "/v1/password-rest": {
       "post": {
-        "operationId": "UserService_ResetPassword",
+        "operationId": "AuthService_ResetPassword",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -208,13 +208,13 @@
           }
         ],
         "tags": [
-          "UserService"
+          "AuthService"
         ]
       }
     },
     "/v1/register": {
       "post": {
-        "operationId": "UserService_Register",
+        "operationId": "AuthService_Register",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -247,13 +247,13 @@
           }
         ],
         "tags": [
-          "UserService"
+          "AuthService"
         ]
       }
     },
     "/v1/request-tokens": {
       "post": {
-        "operationId": "UserService_RequestTokens",
+        "operationId": "AuthService_RequestTokens",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -286,7 +286,7 @@
           }
         ],
         "tags": [
-          "UserService"
+          "AuthService"
         ]
       }
     }

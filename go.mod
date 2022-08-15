@@ -12,6 +12,9 @@ require (
 	github.com/jinzhu/gorm v1.9.11
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/sirupsen/logrus v1.4.2
+	go.uber.org/atomic v1.10.0 // indirect
+	go.uber.org/multierr v1.8.0 // indirect
+	go.uber.org/zap v1.22.0 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	golang.org/x/oauth2 v0.0.0-20210220000619-9bb904979d93
 	google.golang.org/genproto v0.0.0-20210224155714-063164c882e6

@@ -111,7 +111,7 @@ message AccessTokenAndRefreshTokenResponse{
     string accessToken=1;
     string refreshToken=2;
 }
-service UserService {
+service AuthService {
 
     rpc RequestTokens (AccessTokenAndRefreshTokenRequest) returns (AccessTokenAndRefreshTokenResponse){
 
