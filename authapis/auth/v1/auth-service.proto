@@ -2,12 +2,14 @@ syntax="proto3";
 package v1;
 
 
-
+ option go_package = "github.com/dezhab-service/authapis/gen/go/auth/v1";
 
 import "google/api/annotations.proto";
-import "protoc-gen-swagger/options/annotations.proto";
+// import "protoc-gen-swagger/options/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
-option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+// option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 	info: {
 		title: "User service";
 		version: "1.0";
