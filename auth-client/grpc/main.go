@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	v1 "github.com/sajanjswl/auth/pkg/api/v1"
+	v1 "github.com/sajanjswl/auth/gen/go/auth/v1"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
@@ -28,14 +28,14 @@ func main() {
 	}
 	defer conn.Close()
 
-	c := v1.NewUserServiceClient(conn)
+	c := v1.NewAuthServiceClient(conn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// register(c, ctx)
+	register(c, ctx)
 
-	login(c, ctx)
+	// login(c, ctx)
 
 	// otp(c, ctx)
 	// verifyOTP(c, ctx)
@@ -46,7 +46,7 @@ func main() {
 
 }
 
-func register(c v1.UserServiceClient, ctx context.Context) {
+func register(c v1.AuthServiceClient, ctx context.Context) {
 
 	fmt.Println("I  was here")
 	req := &v1.RegistrationRequest{
@@ -69,84 +69,84 @@ func register(c v1.UserServiceClient, ctx context.Context) {
 
 }
 
-func reset(c v1.UserServiceClient, ctx context.Context) {
+// func reset(c v1.UserServiceClient, ctx context.Context) {
 
-	req1 := &v1.ResetPasswordRequest{
-		ApiVersion: apiVersion,
-		EmailID:    "sjnjaiswal@gmail.com",
-		Password:   "sajan4",
-		OTP:        "632111",
-	}
-	res1, err := c.ResetPassword(ctx, req1)
-	if err != nil {
-		log.Fatalf("login failed: %v", err)
-	}
-	log.Printf("login result: <%+v>\n\n", res1)
+// 	req1 := &v1.ResetPasswordRequest{
+// 		ApiVersion: apiVersion,
+// 		EmailID:    "sjnjaiswal@gmail.com",
+// 		Password:   "sajan4",
+// 		OTP:        "632111",
+// 	}
+// 	res1, err := c.ResetPassword(ctx, req1)
+// 	if err != nil {
+// 		log.Fatalf("login failed: %v", err)
+// 	}
+// 	log.Printf("login result: <%+v>\n\n", res1)
 
-}
+// }
 
-func login(c v1.UserServiceClient, ctx context.Context) {
+// func login(c v1.UserServiceClient, ctx context.Context) {
 
-	req1 := &v1.LoginRequest{
-		ApiVersion: apiVersion,
-		EmailID:    "sjnjaiswal@gmail.com",
-		Password:   "password",
-	}
-	res1, err := c.Login(ctx, req1)
-	if err != nil {
-		log.Fatalf("login failed: %v", err)
-	}
-	log.Printf("login result: <%+v>\n\n", res1)
+// 	req1 := &v1.LoginRequest{
+// 		ApiVersion: apiVersion,
+// 		EmailID:    "sjnjaiswal@gmail.com",
+// 		Password:   "password",
+// 	}
+// 	res1, err := c.Login(ctx, req1)
+// 	if err != nil {
+// 		log.Fatalf("login failed: %v", err)
+// 	}
+// 	log.Printf("login result: <%+v>\n\n", res1)
 
-}
+// }
 
-func otp(c v1.UserServiceClient, ctx context.Context) {
+// func otp(c v1.UserServiceClient, ctx context.Context) {
 
-	req1 := &v1.LoginWithOTPRequest{
-		ApiVersion: apiVersion,
-		EmailID:    "sjnjaiswal@gmail.com",
-	}
+// 	req1 := &v1.LoginWithOTPRequest{
+// 		ApiVersion: apiVersion,
+// 		EmailID:    "sjnjaiswal@gmail.com",
+// 	}
 
-	res1, err := c.OTP(ctx, req1)
-	if err != nil {
-		log.Fatalf("login failed: %v", err)
-	}
-	log.Printf("login result: <%+v>\n\n", res1)
+// 	res1, err := c.OTP(ctx, req1)
+// 	if err != nil {
+// 		log.Fatalf("login failed: %v", err)
+// 	}
+// 	log.Printf("login result: <%+v>\n\n", res1)
 
-}
+// }
 
-func verifyOTP(c v1.UserServiceClient, ctx context.Context) {
+// func verifyOTP(c v1.UserServiceClient, ctx context.Context) {
 
-	req1 := &v1.VerifyOTPRequest{
-		ApiVersion: apiVersion,
-		EmailID:    "sjnjaiswal@gmail.com",
-		OTP:        "826559",
-	}
+// 	req1 := &v1.VerifyOTPRequest{
+// 		ApiVersion: apiVersion,
+// 		EmailID:    "sjnjaiswal@gmail.com",
+// 		OTP:        "826559",
+// 	}
 
-	res1, err := c.VerifyOTP(ctx, req1)
+// 	res1, err := c.VerifyOTP(ctx, req1)
 
-	// res1, err := c.VerifyOTP()(ctx, req1)
-	if err != nil {
-		log.Fatalf("login failed: %v", err)
-	}
-	log.Printf("verify result: <%+v>\n\n", res1)
+// 	// res1, err := c.VerifyOTP()(ctx, req1)
+// 	if err != nil {
+// 		log.Fatalf("login failed: %v", err)
+// 	}
+// 	log.Printf("verify result: <%+v>\n\n", res1)
 
-}
+// }
 
-func requestTokens(c v1.UserServiceClient, ctx context.Context) {
+// func requestTokens(c v1.UserServiceClient, ctx context.Context) {
 
-	req1 := &v1.AccessTokenAndRefreshTokenRequest{
-		ApiVersion:   apiVersion,
-		AccessToken:  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJzam5qYWlzd2FsQGdtYWlsLmNvbSIsImV4cCI6MTU5MTY4ODc2MCwiaWF0IjoxNTkwNjg4NzYwLCJpc3MiOiJUZXNsYSIsIm5iZiI6MTU5MDY4ODc2MH0.bRsE5bz0js0DzS8vOFvZhAqMqzZHona_6PnPS3AVyRU",
-		RefreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJzam5qYWlzd2FsQGdtYWlsLmNvbSIsImV4cCI6MTU5MDc4ODc2MCwiaWF0IjoxNTkwNjg4NzYwLCJpc3MiOiJUZXNsYSIsIm5iZiI6MTU5MDY4ODc2MH0.V72BZLEf9AtyT0W2JRfgrUszXrVAtVs8_ImURQg1p1s",
-	}
+// 	req1 := &v1.AccessTokenAndRefreshTokenRequest{
+// 		ApiVersion:   apiVersion,
+// 		AccessToken:  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJzam5qYWlzd2FsQGdtYWlsLmNvbSIsImV4cCI6MTU5MTY4ODc2MCwiaWF0IjoxNTkwNjg4NzYwLCJpc3MiOiJUZXNsYSIsIm5iZiI6MTU5MDY4ODc2MH0.bRsE5bz0js0DzS8vOFvZhAqMqzZHona_6PnPS3AVyRU",
+// 		RefreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJzam5qYWlzd2FsQGdtYWlsLmNvbSIsImV4cCI6MTU5MDc4ODc2MCwiaWF0IjoxNTkwNjg4NzYwLCJpc3MiOiJUZXNsYSIsIm5iZiI6MTU5MDY4ODc2MH0.V72BZLEf9AtyT0W2JRfgrUszXrVAtVs8_ImURQg1p1s",
+// 	}
 
-	res1, err := c.RequestTokens(ctx, req1)
+// 	res1, err := c.RequestTokens(ctx, req1)
 
-	// res1, err := c.VerifyOTP()(ctx, req1)
-	if err != nil {
-		log.Fatalf("login failed: %v", err)
-	}
-	log.Printf(" requestTokens result: <%+v>\n\n", res1)
+// 	// res1, err := c.VerifyOTP()(ctx, req1)
+// 	if err != nil {
+// 		log.Fatalf("login failed: %v", err)
+// 	}
+// 	log.Printf(" requestTokens result: <%+v>\n\n", res1)
 
-}
+// }

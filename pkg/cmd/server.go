@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -18,7 +17,7 @@ type Config struct {
 	GRPCPort string
 }
 
-func RunServer(cfg *config.Config, logger *zap.Logger) error {
+func RunServer(cfg *config.Config, logger *zap.Logger) {
 
 	// initialising postgress db endpoints
 	// postgres_endpoints := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
@@ -39,21 +38,20 @@ func RunServer(cfg *config.Config, logger *zap.Logger) error {
 	// }
 	// log.Println("connected to db...!!!")
 
-	fmt.Println("I was here")
 	ctx := context.Background()
 
 	var db *gorm.DB
 	//  passing DB connection to Grpc
-	v1API := grpcv1.NewAuthServiceServer(db, logger)
+	grpcAuthServerApi := grpcv1.NewAuthServiceServer(db, logger, cfg)
 
-	//passing DB connection to Rest
-	restServer := restv1.RestServer{Db: db}
+	// //passing DB connection to Rest
+	restAuthServerApi := restv1.RestServer{Db: db}
 
 	// // run HTTP gateway
 	go func() {
-		_ = rest.RunServer(ctx, restServer, cfg.GRPCPort, cfg.RESTHost, cfg.RESTPort)
+		_ = rest.RunServer(ctx, restAuthServerApi, cfg, logger)
 	}()
 
 	// run grpc server
-	return grpc.RunServer(ctx, v1API, cfg.GRPCPort)
+	grpc.RunServer(ctx, grpcAuthServerApi, cfg, logger)
 }

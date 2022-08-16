@@ -1,9 +1,13 @@
 package v1
 
 import (
+	"context"
 	"errors"
+	"fmt"
+	"log"
 
 	"github.com/jinzhu/gorm"
+	"github.com/sajanjswl/auth/config"
 	v1 "github.com/sajanjswl/auth/gen/go/auth/v1"
 
 	// v1 "github.com/sajanjswl/auth/pkg/api/v1"
@@ -22,13 +26,15 @@ type authServiceServer struct {
 	db     *gorm.DB
 	logger *zap.Logger
 	v1.UnimplementedAuthServiceServer
+	config *config.Config
 }
 
 // register db wiht server
-func NewAuthServiceServer(db *gorm.DB, logger *zap.Logger) v1.AuthServiceServer {
+func NewAuthServiceServer(db *gorm.DB, logger *zap.Logger, cfg *config.Config) v1.AuthServiceServer {
 	return &authServiceServer{
 		db:     db,
 		logger: logger,
+		config: cfg,
 	}
 }
 
@@ -119,52 +125,53 @@ func checkAPI(api string) error {
 
 // }
 
-// func (s *userServiceServer) Register(ctx context.Context, req *v1.RegistrationRequest) (*v1.RegistrationResponse, error) {
+func (s *authServiceServer) Register(ctx context.Context, req *v1.RegistrationRequest) (*v1.RegistrationResponse, error) {
 
-// 	if err := checkAPI(req.GetApiVersion()); err != nil {
-// 		log.Println(err)
-// 		return nil, err
-// 	}
+	fmt.Println("I was in register!!")
+	if err := checkAPI(req.GetApiVersion()); err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
-// 	db := s.db
-// 	user, err := utils.FindUser(db, config.FindUserByEmail, req.GetUser().GetEmailID())
+	// db := s.db
+	// user, err := utils.FindUser(db, config.FindUserByEmail, req.GetUser().GetEmailID())
 
-// 	if user != nil {
-// 		log.Error(req.GetUser().GetEmailID(), " ", config.EmailAlreadyExists)
-// 		return nil, status.Error(codes.AlreadyExists, config.EmailAlreadyExists)
-// 	}
+	// if user != nil {
+	// 	// log.Error(req.GetUser().GetEmailID(), " ", config.EmailAlreadyExists)
+	// 	return nil, status.Error(codes.AlreadyExists, config.EmailAlreadyExists)
+	// }
 
-// 	// //bycrpting the plaint text password
-// 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(req.GetUser().GetPassword()), bcrypt.MinCost)
-// 	if err != nil {
-// 		log.Error(err)
-// 		return nil, status.Errorf(codes.Internal, config.InternalError)
-// 	}
+	// //bycrpting the plaint text password
+	// passwordHash, err := bcrypt.GenerateFromPassword([]byte(req.GetUser().GetPassword()), bcrypt.MinCost)
+	// if err != nil {
+	// 	log.Error(err)
+	// 	return nil, status.Errorf(codes.Internal, config.InternalError)
+	// }
 
-// 	//passing  request data into dbUser type
-// 	user = &schema.DbUser{
-// 		Uuid:           guuid.New(),
-// 		PrimaryContact: req.GetUser().GetMobileNumber(),
-// 		Email:          req.GetUser().GetEmailID(),
-// 		Password:       string(passwordHash),
-// 		FirstName:      req.GetUser().GetFirstName(),
-// 		LastName:       req.GetUser().GetLastName(),
-// 		CreatedAt:      time.Now().Format(time.RFC3339),
-// 		PendingDetails: true,
-// 		IsVerified:     true,
-// 		IsBlocked:      false,
-// 	}
+	//passing  request data into dbUser type
+	// user = &schema.DbUser{
+	// 	Uuid:           guuid.New(),
+	// 	PrimaryContact: req.GetUser().GetMobileNumber(),
+	// 	Email:          req.GetUser().GetEmailID(),
+	// 	Password:       string(passwordHash),
+	// 	FirstName:      req.GetUser().GetFirstName(),
+	// 	LastName:       req.GetUser().GetLastName(),
+	// 	CreatedAt:      time.Now().Format(time.RFC3339),
+	// 	PendingDetails: true,
+	// 	IsVerified:     true,
+	// 	IsBlocked:      false,
+	// }
 
-// 	//registering user
-// 	registeringUser := db.Table(schema.TableUsers).Create(&user)
-// 	if registeringUser.Error != nil {
-// 		log.Error(registeringUser.Error)
-// 		err := status.Error(codes.Internal, registeringUser.Error.Error())
-// 		return nil, err
-// 	}
+	//registering user
+	// registeringUser := db.Table(schema.TableUsers).Create(&user)
+	// if registeringUser.Error != nil {
+	// 	log.Error(registeringUser.Error)
+	// 	err := status.Error(codes.Internal, registeringUser.Error.Error())
+	// 	return nil, err
+	// }
 
-// 	return &v1.RegistrationResponse{Message: "successfully registerd  " + req.GetUser().GetFirstName() + "  " + req.GetUser().GetLastName()}, nil
-// }
+	return &v1.RegistrationResponse{Message: "successfully registerd  " + req.GetUser().GetFirstName() + "  " + req.GetUser().GetLastName()}, nil
+}
 
 // func (s *userServiceServer) Home(ctx context.Context, req *v1.HomeRequest) (*v1.HomeResponse, error) {
 // 	// if err := checkAPI(req.GetApiVersion()); err != nil {

@@ -3,9 +3,9 @@ package utils
 import (
 	"time"
 
+	"github.com/jinzhu/gorm"
 	"github.com/sajanjswl/auth/config"
 	schema "github.com/sajanjswl/auth/data"
-	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

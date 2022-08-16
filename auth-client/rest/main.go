@@ -6,7 +6,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-	log "github.com/sirupsen/logrus"	
+
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -15,12 +16,11 @@ func main() {
 	flag.Parse()
 
 	register(address)
-login(address)
+	login(address)
 
 }
 
-
-func login(address *string){
+func login(address *string) {
 	var body string
 
 	resp, err := http.Post(*address+"/v1/login", "application/json", strings.NewReader(fmt.Sprintf(`
@@ -44,8 +44,7 @@ func login(address *string){
 
 }
 
-
-func register(address *string){
+func register(address *string) {
 	var body string
 
 	resp, err := http.Post(*address+"/v1/login", "application/json", strings.NewReader(fmt.Sprintf(`
@@ -70,4 +69,3 @@ func register(address *string){
 	log.Printf("Loging response: Code=%d, Body=%s\n\n", resp, body)
 
 }
-

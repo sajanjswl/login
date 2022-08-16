@@ -48,7 +48,6 @@ type Config struct {
 	//  google auth endpoints and secret
 	GoogleLoginEnpoint    string
 	GoogleCallbackEnpoint string
-
 	GoogleRedirectURl  string
 	GoogleClientId     string
 	GoogleClientSecret string

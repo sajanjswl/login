@@ -8,33 +8,36 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	v1 "github.com/sajanjswl/auth/pkg/api/v1"
+	"github.com/sajanjswl/auth/config"
+	v1 "github.com/sajanjswl/auth/gen/go/auth/v1"
 	restv1 "github.com/sajanjswl/auth/pkg/rest-service/v1"
-	log "github.com/sirupsen/logrus"
+
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
 
 // RunServer runs HTTP/REST gateway
-func RunServer(ctx context.Context, restServer restv1.RestServer, grpcPort, grpcHost, httpPort string) error {
+func RunServer(ctx context.Context, restServer restv1.RestServer, cfg *config.Config, logger *zap.Logger) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
 	rmux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 
-	if err := v1.RegisterUserServiceHandlerFromEndpoint(ctx, rmux, grpcHost+":"+grpcPort, opts); err != nil {
+	if err := v1.RegisterAuthServiceHandlerFromEndpoint(ctx, rmux, cfg.GRPCHost+":"+cfg.GRPCPort, opts); err != nil {
 
-		log.Fatalf("failed to start HTTP gateway: %v", err)
+		logger.Error("failed to start gRPC-Rest gatewy", zap.Error(err))
+		return err
 	}
 
 	restServer.Mux = http.NewServeMux()
 	restServer.Mux.Handle("/", rmux)
 
-	// // calling handler
+	// calling handler
 	restServer.InitialRoutes()
 
 	srv := &http.Server{
-		Addr:    ":" + httpPort,
+		Addr:    ":" + cfg.RESTPort,
 		Handler: restServer.Mux,
 	}
 
@@ -44,8 +47,8 @@ func RunServer(ctx context.Context, restServer restv1.RestServer, grpcPort, grpc
 	go func() {
 		for range c {
 			// sig is a ^C, handle it
+			logger.Warn("shutting down gRPC-Rest Gateway....!!!")
 
-			log.Println("shutting down HTTP/REST gateway...!!!")
 		}
 
 		_, cancel := context.WithTimeout(ctx, 5*time.Second)
@@ -54,6 +57,8 @@ func RunServer(ctx context.Context, restServer restv1.RestServer, grpcPort, grpc
 		_ = srv.Shutdown(ctx)
 	}()
 
-	log.Println("starting HTTP/REST gateway...!!!")
+	logger.Info("stating gRPC-Rest Gateway....!!!")
+
 	return srv.ListenAndServe()
+
 }

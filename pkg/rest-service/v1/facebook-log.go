@@ -8,11 +8,11 @@ import (
 	"os"
 	"time"
 
+	guuid "github.com/google/uuid"
+	"github.com/jinzhu/gorm"
 	"github.com/sajanjswl/auth/config"
 	schema "github.com/sajanjswl/auth/data"
 	"github.com/sajanjswl/auth/utils"
-	guuid "github.com/google/uuid"
-	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
 	facebookOAuth "golang.org/x/oauth2/facebook"
