@@ -3,17 +3,18 @@ package v1
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 
-	"github.com/jinzhu/gorm"
+	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
+
 	"github.com/sajanjswl/auth/config"
 	v1 "github.com/sajanjswl/auth/gen/go/auth/v1"
-
-	// v1 "github.com/sajanjswl/auth/pkg/api/v1"
+	"github.com/sajanjswl/auth/models"
 
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
 
@@ -53,300 +54,101 @@ func checkAPI(api string) error {
 	return errors.New("unsupported API version: Api version cannot be nil")
 }
 
-// func (s *userServiceServer) Login(ctx context.Context, req *v1.LoginRequest) (*v1.LoginResponse, error) {
+func (s *authServiceServer) LoginUser(ctx context.Context, req *v1.LoginRequest) (*v1.LoginResponse, error) {
 
-// 	if err := checkAPI(req.GetApiVersion()); err != nil {
-// 		log.Error(err)
-// 		return nil, err
-// 	}
-// 	db := s.db
-
-// 	user, err := utils.FindUser(db, config.FindUserByEmail, req.GetEmailID())
-// 	if user == nil {
-// 		log.Error(req.GetEmailID(), " ", err)
-// 		return nil, err
-// 	}
-
-// 	if user.IsBlocked {
-
-// 		if user.TimeTillBlock.Before(time.Now()) {
-// 			user.IsBlocked = false
-// 			user.TimeTillBlock = time.Time{}
-
-// 			goto CONTINUE
-// 		}
-
-// 		log.Error(user.Email, " is blocked total invalid attempts ", user.WrongPwdCount)
-
-// 		return nil, status.Error(403, config.ForbiddenReques403)
-// 	}
-
-// CONTINUE:
-
-// 	//authenticating password
-// 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.GetPassword()))
-
-// 	if err != nil {
-
-// 		user.WrongPwdCount = user.WrongPwdCount + 1
-// 		if user.WrongPwdCount >= 3 {
-// 			user.IsBlocked = true
-
-// 			blockTimePeriod, _ := strconv.Atoi(os.Getenv("USER_BLOCKED_RESET_TIME"))
-
-// 			user.TimeTillBlock = time.Now().Add(time.Duration(blockTimePeriod) * time.Minute)
-// 		}
-
-// 		if err := utils.UpdateIsBlockedWrongPwdCountAndTimeTillBlock(db, user.Email, user.WrongPwdCount, user.IsBlocked, user.TimeTillBlock); err != nil {
-
-// 			return nil, err
-
-// 		}
-
-// 		return nil, status.Errorf(codes.Unauthenticated, config.LoginFailed)
-// 	}
-// 	user.WrongPwdCount = 0
-// 	user.AccessToken, user.RefreshToken, err = utils.GetAccessTokenAndRefreshtoken(user.Email)
-// 	if err != nil {
-// 		return nil, status.Error(codes.Internal, "Internal error")
-// 	}
-
-// 	if err := utils.SaveLoginDetails(db, user.WrongPwdCount, user.IsBlocked, user.TimeTillBlock, user.Email, user.AccessToken, user.RefreshToken); err != nil {
-// 		return nil, err
-// 	}
-
-// 	response := &v1.LoginResponse{
-// 		RefreshToken: user.RefreshToken,
-// 		AccessToken:  user.AccessToken,
-// 		Status:       "Hello  " + user.FirstName + config.SuccessFullLoginMessage,
-// 	}
-
-// 	return response, nil
-
-// }
-
-func (s *authServiceServer) Register(ctx context.Context, req *v1.RegistrationRequest) (*v1.RegistrationResponse, error) {
-
-	fmt.Println("I was in register!!")
 	if err := checkAPI(req.GetApiVersion()); err != nil {
-		log.Println(err)
+		s.logger.Warn("api version conflice", zap.Error(err))
 		return nil, err
 	}
 
-	// db := s.db
-	// user, err := utils.FindUser(db, config.FindUserByEmail, req.GetUser().GetEmailID())
+	user := &models.User{}
+	if err := models.GetUser(s.db, user, req.GetEmailID()); err != nil {
+		s.logger.Warn("error reading user from datatbase", zap.String("email", user.Email), zap.Error(err))
+		return nil, status.Error(codes.NotFound, "user not found")
+	}
 
-	// if user != nil {
-	// 	// log.Error(req.GetUser().GetEmailID(), " ", config.EmailAlreadyExists)
-	// 	return nil, status.Error(codes.AlreadyExists, config.EmailAlreadyExists)
-	// }
+	//authenticating password
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.GetPassword())); err != nil {
+		s.logger.Info("password incorrect", zap.String("email", user.Email), zap.Error(err))
+		return nil, errors.New("Password incorrect")
+	}
 
-	// //bycrpting the plaint text password
-	// passwordHash, err := bcrypt.GenerateFromPassword([]byte(req.GetUser().GetPassword()), bcrypt.MinCost)
-	// if err != nil {
-	// 	log.Error(err)
-	// 	return nil, status.Errorf(codes.Internal, config.InternalError)
-	// }
+	response := &v1.LoginResponse{
+		Status:  "200",
+		Message: "Hello  " + user.Name + "Logged in Successfully!!",
+	}
+	return response, nil
 
-	//passing  request data into dbUser type
-	// user = &schema.DbUser{
-	// 	Uuid:           guuid.New(),
-	// 	PrimaryContact: req.GetUser().GetMobileNumber(),
-	// 	Email:          req.GetUser().GetEmailID(),
-	// 	Password:       string(passwordHash),
-	// 	FirstName:      req.GetUser().GetFirstName(),
-	// 	LastName:       req.GetUser().GetLastName(),
-	// 	CreatedAt:      time.Now().Format(time.RFC3339),
-	// 	PendingDetails: true,
-	// 	IsVerified:     true,
-	// 	IsBlocked:      false,
-	// }
-
-	//registering user
-	// registeringUser := db.Table(schema.TableUsers).Create(&user)
-	// if registeringUser.Error != nil {
-	// 	log.Error(registeringUser.Error)
-	// 	err := status.Error(codes.Internal, registeringUser.Error.Error())
-	// 	return nil, err
-	// }
-
-	return &v1.RegistrationResponse{Message: "successfully registerd  " + req.GetUser().GetFirstName() + "  " + req.GetUser().GetLastName()}, nil
 }
 
-// func (s *userServiceServer) Home(ctx context.Context, req *v1.HomeRequest) (*v1.HomeResponse, error) {
-// 	// if err := checkAPI(req.GetApiVersion()); err != nil {
-// 	// 	log.Println(err)
-// 	// 	return nil, err
-// 	// }
-// 	md, ok := metadata.FromIncomingContext(ctx)
+func (s *authServiceServer) RegisterUser(ctx context.Context, req *v1.RegistrationRequest) (*v1.RegistrationResponse, error) {
+	if err := checkAPI(req.GetApiVersion()); err != nil {
+		s.logger.Warn("Api verison error", zap.Error(err))
+		return nil, err
+	}
+	user := &models.User{}
+	if err := models.GetUser(s.db, user, req.GetUser().EmailID); err == nil {
+		return nil, status.Error(codes.AlreadyExists, "user already exists")
+	}
 
-// 	log.Println(ok)
+	//bycrpting the plaint text password
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(req.GetUser().GetPassword()), bcrypt.MinCost)
+	if err != nil {
+		s.logger.Warn("Failed to hash password", zap.Error(err))
+		return nil, status.Errorf(codes.Internal, "internal error")
+	}
 
-// 	log.Println("Printing headers", md)
+	user.Email = req.GetUser().EmailID
+	user.Password = string(passwordHash)
+	user.Name = req.GetUser().Name
+	user.Mobile = req.GetUser().MobileNumber
 
-// 	return &v1.HomeResponse{
-// 		Message: "you are in home your hardwork paid off",
-// 	}, nil
+	if err := models.CreateUser(s.db, user); err != nil {
+		s.logger.Warn("Failed to register user", zap.String("email", user.Email), zap.Error(err))
+	}
 
-// }
+	s.logger.Info("register user", zap.String("email", user.Email))
 
-// func (s *userServiceServer) OTP(ctx context.Context, req *v1.LoginWithOTPRequest) (*v1.LoginWithOTPResponse, error) {
+	return &v1.RegistrationResponse{Message: "successfully registerd  " + req.GetUser().GetName() + "  " + req.GetUser().EmailID}, nil
+}
 
-// 	if err := checkAPI(req.GetApiVersion()); err != nil {
-// 		log.Println(err)
-// 		return nil, err
-// 	}
-// 	db := s.db
+func (s *authServiceServer) UpdateUser(ctx context.Context, req *v1.UpdateUserRequest) (*v1.UpdateUserResponse, error) {
+	if err := checkAPI(req.GetApiVersion()); err != nil {
+		s.logger.Warn("Api verison error", zap.Error(err))
+		return nil, err
+	}
+	user := &models.User{}
+	if err := models.GetUser(s.db, user, req.User.EmailID); err != nil {
+		s.logger.Warn("error reading user from datatbase", zap.String("email", user.Email), zap.Error(err))
+		return nil, status.Error(codes.NotFound, "user not found")
+	}
 
-// 	user, err := utils.FindUser(db, config.FindUserByEmail, req.GetEmailID())
+	user.Email = req.User.EmailID
+	user.Name = req.User.Name
+	user.Mobile = req.User.MobileNumber
 
-// 	if user == nil {
-// 		return nil, err
-// 	}
+	if err := models.UpdateUser(s.db, user); err != nil {
+		s.logger.Warn("Failed to update user", zap.String("email", user.Email), zap.Error(err))
+	}
 
-// 	otplength, err := strconv.Atoi(os.Getenv("OTP_LENGTH"))
-// 	if err != nil {
-// 		log.Panic(err)
-// 	}
+	s.logger.Info("update user", zap.String("email", user.Email))
 
-// 	token := mail.GenerateOTP(otplength)
+	return &v1.UpdateUserResponse{Message: "successfully update  " + req.GetUser().GetName() + "  " + req.GetUser().EmailID}, nil
+}
 
-// 	otpExpirePeriod, err := strconv.Atoi(os.Getenv("OTP_EXPIRE_TIME"))
-// 	if err != nil {
-// 		log.Panic(err)
-// 	}
+func (s *authServiceServer) Home(ctx context.Context, req *v1.HomeRequest) (*v1.HomeResponse, error) {
+	// if err := checkAPI(req.GetApiVersion()); err != nil {
+	// 	log.Println(err)
+	// 	return nil, err
+	// }
+	md, ok := metadata.FromIncomingContext(ctx)
 
-// 	if err := utils.SaveOTPAndOTPExpiryTime(db, user.Email, token, time.Now().Add(time.Duration(otpExpirePeriod)*time.Minute)); err != nil {
+	log.Println(ok)
 
-// 		return nil, err
+	log.Println("Printing headers", md)
 
-// 	}
+	return &v1.HomeResponse{
+		Message: "You are in home!!",
+	}, nil
 
-// 	if err := mail.SendOTP(token, user.Email, user.PrimaryContact); err != nil {
-// 		return nil, err
-// 	}
-
-// 	return &v1.LoginWithOTPResponse{
-// 		Message: "OTP sent Successfully",
-// 	}, nil
-// }
-
-// func (s *userServiceServer) VerifyOTP(ctx context.Context, req *v1.VerifyOTPRequest) (*v1.VerifyOTPResponse, error) {
-
-// 	if err := checkAPI(req.GetApiVersion()); err != nil {
-// 		log.Println(err)
-// 		return nil, err
-// 	}
-// 	db := s.db
-
-// 	user, err := utils.FindUser(db, config.FindUserByEmail, req.GetEmailID())
-// 	if user == nil {
-// 		log.Error(req.GetEmailID(), " ", err)
-// 		return nil, err
-// 	}
-
-// 	if user.OtpExpiry.Before(time.Now()) {
-// 		log.Println("OTP Has expired for ", req.GetEmailID())
-// 		return nil, errors.New("OTP Expired")
-// 	}
-// 	flag := strings.Compare(user.CurrentOtp, req.GetOTP())
-
-// 	if flag != 0 {
-
-// 		log.Println("current OTP requested OTP ", user.CurrentOtp, req.GetOTP())
-
-// 		return nil, errors.New("wrong credential")
-
-// 	}
-
-// 	accessToken, refreshToken, err := utils.GetAccessTokenAndRefreshtoken(user.Email)
-// 	if err != nil {
-// 		return nil, status.Error(codes.Internal, "Internal error")
-// 	}
-
-// 	return &v1.VerifyOTPResponse{
-// 		AccessToken:  accessToken,
-// 		RefreshToken: refreshToken,
-// 	}, nil
-
-// }
-
-// func (s *userServiceServer) ResetPassword(ctx context.Context, req *v1.ResetPasswordRequest) (*v1.ResetPasswordResponse, error) {
-// 	if err := checkAPI(req.GetApiVersion()); err != nil {
-// 		log.Println(err)
-// 		return nil, err
-// 	}
-// 	db := s.db
-
-// 	user, err := utils.FindUser(db, config.FindUserByEmail, req.GetEmailID())
-// 	if user == nil {
-// 		log.Error(req.GetEmailID(), " ", err)
-// 		return nil, err
-// 	}
-
-// 	if user.OtpExpiry.Before(time.Now()) {
-// 		log.Println("OTP Has expired for ", req.GetEmailID())
-// 		return nil, errors.New("OTP Expired")
-// 	}
-// 	flag := strings.Compare(user.CurrentOtp, req.GetOTP())
-
-// 	if flag != 0 {
-
-// 		log.Println("current OTP %s requested OTP %s", user.CurrentOtp, req.GetOTP())
-
-// 		return nil, errors.New("wrong credential")
-
-// 	}
-
-// 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(req.GetPassword()), bcrypt.MinCost)
-// 	if err != nil {
-// 		log.Error(err)
-// 		return nil, status.Errorf(codes.Internal, config.InternalError)
-// 	}
-
-// 	user.AccessToken, user.RefreshToken, err = utils.GetAccessTokenAndRefreshtoken(user.Email)
-// 	if err != nil {
-// 		return nil, status.Error(codes.Internal, "Internal error")
-// 	}
-
-// 	utils.SavePasswordAccessTokenAndRefreshToken(db, user.Email, string(passwordHash), user.AccessToken, user.RefreshToken)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	return &v1.ResetPasswordResponse{
-// 		AccessToken:  user.AccessToken,
-// 		RefreshToken: user.RefreshToken,
-// 	}, nil
-// }
-
-// func (s *userServiceServer) RequestTokens(ctx context.Context, req *v1.AccessTokenAndRefreshTokenRequest) (*v1.AccessTokenAndRefreshTokenResponse, error) {
-
-// 	if err := checkAPI(req.GetApiVersion()); err != nil {
-// 		log.Error(err)
-// 		return nil, err
-// 	}
-
-// 	claims, err := auth.VerifyRefreshToken(req.GetRefreshToken())
-// 	if err != nil {
-// 		log.Println(err)
-// 		return nil, errors.New("failed to verify token")
-// 	}
-
-// 	accessToken, refreshToken, err := utils.GetAccessTokenAndRefreshtoken(claims.UserID)
-// 	if err != nil {
-// 		return nil, status.Error(codes.Internal, "Internal error")
-// 	}
-
-// 	err = utils.SaveAccessTokenAndRefreshToken(s.db, claims.UserID, accessToken, refreshToken)
-// 	if err != nil {
-
-// 		log.Error(err)
-// 		return nil, status.Error(codes.Internal, "Internal error")
-// 	}
-
-// 	return &v1.AccessTokenAndRefreshTokenResponse{
-// 		AccessToken:  accessToken,
-// 		RefreshToken: refreshToken,
-// 	}, nil
-// }
+}

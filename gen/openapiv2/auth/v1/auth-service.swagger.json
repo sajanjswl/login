@@ -58,7 +58,7 @@
     },
     "/v1/login": {
       "post": {
-        "operationId": "AuthService_Login",
+        "operationId": "AuthService_LoginUser",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -95,126 +95,9 @@
         ]
       }
     },
-    "/v1/login/otp": {
-      "post": {
-        "operationId": "AuthService_OTP",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1LoginWithOTPResponse"
-            }
-          },
-          "404": {
-            "description": "Returned when the resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1LoginWithOTPRequest"
-            }
-          }
-        ],
-        "tags": [
-          "AuthService"
-        ]
-      }
-    },
-    "/v1/login/otp/verify": {
-      "post": {
-        "operationId": "AuthService_VerifyOTP",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1VerifyOTPResponse"
-            }
-          },
-          "404": {
-            "description": "Returned when the resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1VerifyOTPRequest"
-            }
-          }
-        ],
-        "tags": [
-          "AuthService"
-        ]
-      }
-    },
-    "/v1/password-rest": {
-      "post": {
-        "operationId": "AuthService_ResetPassword",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ResetPasswordResponse"
-            }
-          },
-          "404": {
-            "description": "Returned when the resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1ResetPasswordRequest"
-            }
-          }
-        ],
-        "tags": [
-          "AuthService"
-        ]
-      }
-    },
     "/v1/register": {
       "post": {
-        "operationId": "AuthService_Register",
+        "operationId": "AuthService_RegisterUser",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -251,14 +134,14 @@
         ]
       }
     },
-    "/v1/request-tokens": {
+    "/v1/update": {
       "post": {
-        "operationId": "AuthService_RequestTokens",
+        "operationId": "AuthService_UpdateUser",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1AccessTokenAndRefreshTokenResponse"
+              "$ref": "#/definitions/v1UpdateUserResponse"
             }
           },
           "404": {
@@ -281,7 +164,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1AccessTokenAndRefreshTokenRequest"
+              "$ref": "#/definitions/v1UpdateUserRequest"
             }
           }
         ],
@@ -322,31 +205,6 @@
         }
       }
     },
-    "v1AccessTokenAndRefreshTokenRequest": {
-      "type": "object",
-      "properties": {
-        "apiVersion": {
-          "type": "string"
-        },
-        "accessToken": {
-          "type": "string"
-        },
-        "refreshToken": {
-          "type": "string"
-        }
-      }
-    },
-    "v1AccessTokenAndRefreshTokenResponse": {
-      "type": "object",
-      "properties": {
-        "accessToken": {
-          "type": "string"
-        },
-        "refreshToken": {
-          "type": "string"
-        }
-      }
-    },
     "v1HomeResponse": {
       "type": "object",
       "properties": {
@@ -375,28 +233,6 @@
         "status": {
           "type": "string"
         },
-        "refreshToken": {
-          "type": "string"
-        },
-        "accessToken": {
-          "type": "string"
-        }
-      }
-    },
-    "v1LoginWithOTPRequest": {
-      "type": "object",
-      "properties": {
-        "apiVersion": {
-          "type": "string"
-        },
-        "emailID": {
-          "type": "string"
-        }
-      }
-    },
-    "v1LoginWithOTPResponse": {
-      "type": "object",
-      "properties": {
         "message": {
           "type": "string"
         }
@@ -421,30 +257,21 @@
         }
       }
     },
-    "v1ResetPasswordRequest": {
+    "v1UpdateUserRequest": {
       "type": "object",
       "properties": {
         "apiVersion": {
           "type": "string"
         },
-        "emailID": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        },
-        "OTP": {
-          "type": "string"
+        "user": {
+          "$ref": "#/definitions/v1User"
         }
       }
     },
-    "v1ResetPasswordResponse": {
+    "v1UpdateUserResponse": {
       "type": "object",
       "properties": {
-        "accessToken": {
-          "type": "string"
-        },
-        "refreshToken": {
+        "message": {
           "type": "string"
         }
       }
@@ -458,38 +285,10 @@
         "password": {
           "type": "string"
         },
-        "firstName": {
-          "type": "string"
-        },
-        "lastName": {
+        "Name": {
           "type": "string"
         },
         "mobileNumber": {
-          "type": "string"
-        }
-      }
-    },
-    "v1VerifyOTPRequest": {
-      "type": "object",
-      "properties": {
-        "apiVersion": {
-          "type": "string"
-        },
-        "emailID": {
-          "type": "string"
-        },
-        "OTP": {
-          "type": "string"
-        }
-      }
-    },
-    "v1VerifyOTPResponse": {
-      "type": "object",
-      "properties": {
-        "accessToken": {
-          "type": "string"
-        },
-        "refreshToken": {
           "type": "string"
         }
       }

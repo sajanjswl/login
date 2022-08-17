@@ -19,26 +19,6 @@ type Config struct {
 	DBPort     string
 	DBSLLMode  string
 
-	//  gorm
-	DBDialect string
-
-	// auth
-	TokenKey              string
-	TokenIssuer           string
-	AccessTokenAliveTime  int
-	RefreshTokenAliveTime int
-	OuthCookieAliveTime   int
-
-	// password reset time
-	PasswordResetInterval int
-
-	// OTP
-	OTPLength    int
-	OTPAliveTime int
-
-	//aws
-	OTPSender string
-
 	// rest endpoints
 	LoginUIEndPoint string
 
@@ -48,26 +28,9 @@ type Config struct {
 	//  google auth endpoints and secret
 	GoogleLoginEnpoint    string
 	GoogleCallbackEnpoint string
-	GoogleRedirectURl  string
-	GoogleClientId     string
-	GoogleClientSecret string
-
-	// facebook login configs
-	FacebookLoginEndPoint    string
-	FacebookCallbackEndPoint string
-	FacebookClientId         string
-	FacebookClientSecret     string
-	FacebookRedirectUrl      string
-
-	//  aws config for OTP
-	AWSAceesKeyId      string
-	AWSSecretAccessKey string
-	AWSRegion          string
-	AWSSMTPUser        string
-	AWSSMTPPassword    string
-	AWSHost            string
-	AWSPort            string
-	AWSSenderEmail     string
+	GoogleRedirectURl     string
+	GoogleClientId        string
+	GoogleClientSecret    string
 }
 
 func NewConfig() *Config {

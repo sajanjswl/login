@@ -2,6 +2,7 @@ package rest
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -17,10 +18,10 @@ import (
 )
 
 // RunServer runs HTTP/REST gateway
-func RunServer(ctx context.Context, restServer restv1.RestServer, cfg *config.Config, logger *zap.Logger) error {
+func RunServer(ctx context.Context, restServer *restv1.RestServer, cfg *config.Config, logger *zap.Logger) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-
+	fmt.Println("I was insider resert run")
 	rmux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 
