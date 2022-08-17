@@ -31,124 +31,70 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 };
 
 message User {
-
     string emailID=2;
     string password=3;
-    string firstName =4;
-    string lastName=5;
+    string  Name =4;
     string mobileNumber=7;
 }
 
 message RegistrationRequest{
- string apiVersion =1;
- User user=2;
+    string apiVersion =1;
+    User user=2;
 
 }
-
-
 message RegistrationResponse {
     string message =1;
 }
+
+message UpdateUserRequest{
+    string apiVersion =1;
+    User user=2;
+
+}
+message UpdateUserResponse {
+    string message =1;
+}
+
+
 message LoginRequest{
     string apiVersion= 1;
     string emailID=2;
     string password=3;
 }
-
 message LoginResponse{
     string status=1;
-    string refreshToken=2;
-    string accessToken=3;
+    string message=2;
 }
 
 
 message HomeRequest{
     string apiVersion=1;
 }
-
 message HomeResponse{
     string message=1;
 }
 
-message LoginWithOTPRequest{
-    string apiVersion= 1;
-    string emailID=2;
-}
-
-message LoginWithOTPResponse{
-    string message=1;
-}
-
-message VerifyOTPRequest{
-    string apiVersion=1;
-    string emailID =3;
-    string  OTP=2;
-}
-
-message VerifyOTPResponse{
-    string accessToken=1;
-   string  refreshToken=2;
-}
-message ResetPasswordRequest{
-    string apiVersion=1;
-    string emailID=2;
-    string password=3;
-    string OTP=4;
-}
-message ResetPasswordResponse{
-    string accessToken=1;
-    string refreshToken=2;
-}
-
-message AccessTokenAndRefreshTokenRequest{
-    string apiVersion=1;
-    string accessToken=2;
-    string refreshToken=3;
-}
 
 
-message AccessTokenAndRefreshTokenResponse{
-    string accessToken=1;
-    string refreshToken=2;
-}
 service AuthService {
-
-    rpc RequestTokens (AccessTokenAndRefreshTokenRequest) returns (AccessTokenAndRefreshTokenResponse){
+    rpc RegisterUser (RegistrationRequest) returns (RegistrationResponse){
 
         option (google.api.http) = {
-            post: "/v1/request-tokens"
+            post: "/v1/register"
             body: "*"
         };
     }
 
-    rpc ResetPassword (ResetPasswordRequest) returns(ResetPasswordResponse){
+    rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse){
 
         option (google.api.http) = {
-            post: "/v1/password-rest"
-            body: "*"
-        };
-
-    }
-
-    rpc VerifyOTP (VerifyOTPRequest) returns (VerifyOTPResponse){
-
-        option (google.api.http) = {
-            post: "/v1/login/otp/verify"
+            post: "/v1/update"
             body: "*"
         };
     }
 
 
-
-    rpc OTP (LoginWithOTPRequest) returns (LoginWithOTPResponse){
-
-        option (google.api.http) = {
-            post: "/v1/login/otp"
-            body: "*"
-        };
-    }
-
-    rpc Login (LoginRequest) returns (LoginResponse){
+    rpc LoginUser (LoginRequest) returns (LoginResponse){
 
         option (google.api.http) = {
             post: "/v1/login"
@@ -163,14 +109,6 @@ service AuthService {
         };
         
 
-    }
-
-    rpc Register (RegistrationRequest) returns (RegistrationResponse){
-
-        option (google.api.http) = {
-            post: "/v1/register"
-            body: "*"
-        };
     }
 
 }
